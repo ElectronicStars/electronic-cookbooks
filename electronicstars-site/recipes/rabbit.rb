@@ -1,1 +1,1 @@
-include "rabbitmq::default"
+include_recipe "rabbitmq::default"
