@@ -7,3 +7,4 @@ version     "1.0.0"
 depends 'mongodb'
 depends 'rabbitmq'
 depends 'redisio'
+depends 'npm'
