@@ -1,5 +1,5 @@
 
-include_attribute 'deploy'
+
  # provisions npm application dependencies
 execute 'npm install' do
     cwd default[:deploy][application][:deploy_to]
