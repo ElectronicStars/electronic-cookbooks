@@ -1,5 +1,10 @@
 
 
+ # provisions npm application dependencies
 
-cwd '/srv/www/admin/'
-execute 'bower install -v'
+
+# provisions bower application dependencies
+execute 'bower install' do
+    cwd '/srv/www/admin/'
+    command 'bower install -v'
+end
