@@ -1,6 +1,6 @@
 include_attribute "deploy"
-include_attribute "opsworks_deploy_python::django"
-include_attribute "opsworks_deploy_python::buildout"
+include_attribute "electronic-python::django"
+include_attribute "electronic-python::buildout"
 
 node.default["deploy_python"]["custom_type"] = "python"
 node.default["deploy_python"]["symlink_before_migrate"] = {}
