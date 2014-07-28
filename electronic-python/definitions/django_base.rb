@@ -7,20 +7,20 @@ define :django_setup do
     app_name application
   end
 
-  # Merge gunicorn settings hashes
-  gunicorn = Hash.new
-  gunicorn.update node["deploy_django"]["gunicorn"] || {}
-  gunicorn.update deploy["django_gunicorn"] || {}
-  node.normal[:deploy][application]["django_gunicorn"] = gunicorn
-
-  if gunicorn["enabled"]
-    python_pip "gunicorn" do
-      virtualenv ::File.join(deploy[:deploy_to], 'shared', 'env')
-      user deploy[:user]
-      group deploy[:group]
-      action :install
-    end
-  end
+  # # Merge gunicorn settings hashes
+  # gunicorn = Hash.new
+  # gunicorn.update node["deploy_django"]["gunicorn"] || {}
+  # gunicorn.update deploy["django_gunicorn"] || {}
+  # node.normal[:deploy][application]["django_gunicorn"] = gunicorn
+  #
+  # if gunicorn["enabled"]
+  #   python_pip "gunicorn" do
+  #     virtualenv ::File.join(deploy[:deploy_to], 'shared', 'env')
+  #     user deploy[:user]
+  #     group deploy[:group]
+  #     action :install
+  #   end
+  # end
 
   celery = Hash.new
   celery.update node["deploy_django"]["celery"] || {}
@@ -46,7 +46,7 @@ define :django_configure do
     # Create local config settings
     template django_cfg do
       source Helpers.django_setting(deploy, 'settings_template', node) || "settings.py.erb"
-      cookbook deploy["django_settings_cookbook"] || 'opsworks_deploy_python'
+      cookbook deploy["django_settings_cookbook"] || 'electronic-python'
       owner deploy[:user]
       group deploy[:group]
       mode 0644
@@ -54,23 +54,23 @@ define :django_configure do
       variables.update deploy
       variables.update :django_database => Helpers.django_setting(deploy, 'database', node)
     end
-    
+
     gunicorn = Hash.new
     gunicorn.update node["deploy_django"]["gunicorn"] || {}
     gunicorn.update deploy["django_gunicorn"] || {}
     node.normal[:deploy][application]["django_gunicorn"] = gunicorn
-    
+
     if gunicorn["enabled"]
       include_recipe 'supervisor'
       base_command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'python')} manage.py run_gunicorn"
-      
+
       gunicorn_cfg = ::File.join(deploy[:deploy_to], 'shared', 'gunicorn_config.py')
       gunicorn_command = "#{base_command} -c #{gunicorn_cfg}"
-      
+
       gunicorn_config gunicorn_command do
         owner deploy[:user]
         group deploy[:group]
-        path  gunicorn_cfg
+        path gunicorn_cfg
         listen "#{gunicorn["host"]}:#{gunicorn["port"]}"
         backlog gunicorn["backlog"]
         worker_processes gunicorn["workers"]
@@ -81,7 +81,7 @@ define :django_configure do
         preload_app gunicorn["preload_app"]
         action :create
       end
-      
+
       supervisor_service application do
         action :enable
         environment gunicorn["environment"] || {}
@@ -90,20 +90,20 @@ define :django_configure do
         autostart true
         user deploy[:user]
       end
-      
+
       supervisor_service application do
         action :nothing
         only_if "sleep 60"
-        subscribes :restart,  "gunicorn_config[#{gunicorn_command}]", :delayed
-        subscribes :restart,  "template[#{django_cfg}]", :delayed
+        subscribes :restart, "gunicorn_config[#{gunicorn_command}]", :delayed
+        subscribes :restart, "template[#{django_cfg}]", :delayed
       end
     end
-    
+
     celery = Hash.new
     celery.update node["deploy_django"]["celery"] || {}
     celery.update deploy["django_celery"] || {}
     node.normal[:deploy][application]["django_celery"] = celery
-    
+
     if celery["djcelery"] && celery["enabled"]
       django_djcelery do
         deploy_data node[:deploy][application]

@@ -4,9 +4,7 @@
 #
 
 node[:deploy].each do |application, deploy|
-  if deploy["custom_type"] != 'django'
-    next
-  end
+
 
   django_setup do
     deploy_data deploy
@@ -45,10 +43,10 @@ node[:deploy].each do |application, deploy|
     app_name application
     run_action [] # Don't run actions here
   end
-  
+
   # Migration
   if deploy["migrate"] && deploy["migration_command"]
-      migration_command = "#{::File.join(deploy["venv"], "bin", "python")} #{deploy["migration_command"]}"
+    migration_command = "#{::File.join(deploy["venv"], "bin", "python")} #{deploy["migration_command"]}"
     execute migration_command do
       cwd ::File.join(deploy[:deploy_to], 'current')
       user deploy[:user]

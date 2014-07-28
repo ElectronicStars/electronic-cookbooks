@@ -4,9 +4,7 @@
 #
 
 node[:deploy].each do |application, deploy|
-  if deploy["custom_type"] != 'django'
-    next
-  end
+  
 
   django_configure do
     deploy_data deploy
