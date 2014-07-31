@@ -23,23 +23,23 @@ cookbook 'python'
 cookbook 'runit'
 cookbook 'uwsgi'
 
-def opsworks_cookbook(name)
-  cookbook name, {:github => "aws/opsworks-cookbooks", :rel => name, :tag => 'release-chef-11.10'}
-end
-
-opsworks_cookbook 'deploy'
-opsworks_cookbook 'dependencies'
-opsworks_cookbook 'gem_support'
-opsworks_cookbook 'scm_helper'
-opsworks_cookbook 'ssh_users'
-opsworks_cookbook 'haproxy'
-opsworks_cookbook 'mod_php5_apache2'
-opsworks_cookbook 'opsworks_agent_monit'
-opsworks_cookbook 'opsworks_commons'
-opsworks_cookbook 'opsworks_initial_setup'
-opsworks_cookbook 'opsworks_java'
-opsworks_cookbook 'opsworks_nodejs'
-cookbook 'electronic-python', {:path => 'electronic-python/'}
+# def opsworks_cookbook(name)
+#   cookbook name, {:github => "aws/opsworks-cookbooks", :rel => name, :tag => 'release-chef-11.10'}
+# end
+#
+# opsworks_cookbook 'deploy'
+# opsworks_cookbook 'dependencies'
+# opsworks_cookbook 'gem_support'
+# opsworks_cookbook 'scm_helper'
+# opsworks_cookbook 'ssh_users'
+# opsworks_cookbook 'haproxy'
+# opsworks_cookbook 'mod_php5_apache2'
+# opsworks_cookbook 'opsworks_agent_monit'
+# opsworks_cookbook 'opsworks_commons'
+# opsworks_cookbook 'opsworks_initial_setup'
+# opsworks_cookbook 'opsworks_java'
+# opsworks_cookbook 'opsworks_nodejs'
+# cookbook 'electronic-python', {:path => 'electronic-python/'}
 
 # opsworks_cookbook 'ssh_host_keys'
 # opsworks_cookbook 'memcached'
