@@ -11,6 +11,7 @@ define :django_setup do
   gunicorn = Hash.new
   gunicorn.update node["deploy_django"]["gunicorn"] || {}
   gunicorn.update deploy["django_gunicorn"] || {}
+  gunicorn["enabled"] = true
   node.normal[:deploy][application]["django_gunicorn"] = gunicorn
 
   if gunicorn["enabled"]
