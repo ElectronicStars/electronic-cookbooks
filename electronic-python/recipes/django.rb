@@ -41,24 +41,26 @@ node[:deploy].each do |application, deploy|
     app_name application
     run_action [] # Don't run actions here
   end
-
+  supervisor_service application do
+    action :restart
+  end
   # Migration
-  if deploy["migrate"] && deploy["migration_command"]
-    migration_command = "#{::File.join(deploy["venv"], "bin", "python")} #{deploy["migration_command"]}"
-    execute migration_command do
-      cwd ::File.join(deploy[:deploy_to], 'current')
-      user deploy[:user]
-      group deploy[:group]
-    end
-  end
-
-  # collect static resources
-  if deploy["django_collect_static"]
-    cmd = deploy["django_collect_static"].is_a?(String) ? deploy["django_collect_static"] : "collectstatic --noinput"
-    execute "#{::File.join(node[:deploy][application]["venv"], "bin", "python")} manage.py #{cmd}" do
-      cwd ::File.join(deploy[:deploy_to], 'current')
-      user deploy[:user]
-      group deploy[:group]
-    end
-  end
+  # if deploy["migrate"] && deploy["migration_command"]
+  #   migration_command = "#{::File.join(deploy["venv"], "bin", "python")} #{deploy["migration_command"]}"
+  #   execute migration_command do
+  #     cwd ::File.join(deploy[:deploy_to], 'current')
+  #     user deploy[:user]
+  #     group deploy[:group]
+  #   end
+  # end
+  #
+  # # collect static resources
+  # if deploy["django_collect_static"]
+  #   cmd = deploy["django_collect_static"].is_a?(String) ? deploy["django_collect_static"] : "collectstatic --noinput"
+  #   execute "#{::File.join(node[:deploy][application]["venv"], "bin", "python")} manage.py #{cmd}" do
+  #     cwd ::File.join(deploy[:deploy_to], 'current')
+  #     user deploy[:user]
+  #     group deploy[:group]
+  #   end
+  # end
 end
