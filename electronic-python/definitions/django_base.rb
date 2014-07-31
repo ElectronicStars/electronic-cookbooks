@@ -8,19 +8,19 @@ define :django_setup do
   end
 
   # # Merge gunicorn settings hashes
-  # gunicorn = Hash.new
-  # gunicorn.update node["deploy_django"]["gunicorn"] || {}
-  # gunicorn.update deploy["django_gunicorn"] || {}
-  # node.normal[:deploy][application]["django_gunicorn"] = gunicorn
-  #
-  # if gunicorn["enabled"]
-  #   python_pip "gunicorn" do
-  #     virtualenv ::File.join(deploy[:deploy_to], 'shared', 'env')
-  #     user deploy[:user]
-  #     group deploy[:group]
-  #     action :install
-  #   end
-  # end
+  gunicorn = Hash.new
+  gunicorn.update node["deploy_django"]["gunicorn"] || {}
+  gunicorn.update deploy["django_gunicorn"] || {}
+  node.normal[:deploy][application]["django_gunicorn"] = gunicorn
+
+  if gunicorn["enabled"]
+    python_pip "gunicorn" do
+      virtualenv ::File.join(deploy[:deploy_to], 'shared', 'env')
+      user deploy[:user]
+      group deploy[:group]
+      action :install
+    end
+  end
 
   celery = Hash.new
   celery.update node["deploy_django"]["celery"] || {}
@@ -64,45 +64,45 @@ define :django_configure do
       gunicorn_cfg = ::File.join(deploy[:deploy_to], 'shared', 'gunicorn_config.py')
       gunicorn_command = "#{base_command} -c #{gunicorn_cfg}"
 
-      uwsgi_service "myapp" do
-        home_path deploy[:deploy_to]
-        pid_path "/var/run/uwsgi-app.pid"
-        host "127.0.0.1"
-        port 8080
-        worker_processes 2
-        app "core.wsgi"
+      # uwsgi_service "myapp" do
+      #   home_path deploy[:deploy_to]
+      #   pid_path "/var/run/uwsgi-app.pid"
+      #   host "127.0.0.1"
+      #   port 8080
+      #   worker_processes 2
+      #   app "core.wsgi"
+      # end
+
+      gunicorn_config gunicorn_command do
+        owner deploy[:user]
+        group deploy[:group]
+        path gunicorn_cfg
+        listen "#{gunicorn["host"]}:#{gunicorn["port"]}"
+        backlog gunicorn["backlog"]
+        worker_processes gunicorn["workers"]
+        worker_class gunicorn["worker_class"]
+        worker_max_requests gunicorn["max_requests"]
+        worker_timeout gunicorn["timeout"]
+        worker_keepalive gunicorn["keepalive"]
+        preload_app gunicorn["preload_app"]
+        action :create
       end
 
-      # gunicorn_config gunicorn_command do
-      #   owner deploy[:user]
-      #   group deploy[:group]
-      #   path gunicorn_cfg
-      #   listen "#{gunicorn["host"]}:#{gunicorn["port"]}"
-      #   backlog gunicorn["backlog"]
-      #   worker_processes gunicorn["workers"]
-      #   worker_class gunicorn["worker_class"]
-      #   worker_max_requests gunicorn["max_requests"]
-      #   worker_timeout gunicorn["timeout"]
-      #   worker_keepalive gunicorn["keepalive"]
-      #   preload_app gunicorn["preload_app"]
-      #   action :create
-      # end
+      supervisor_service application do
+        action :enable
+        environment gunicorn["environment"] || {}
+        command gunicorn_command
+        directory ::File.join(deploy[:deploy_to], "current")
+        autostart true
+        user deploy[:user]
+      end
 
-      # supervisor_service application do
-      #   action :enable
-      #   environment gunicorn["environment"] || {}
-      #   command gunicorn_command
-      #   directory ::File.join(deploy[:deploy_to], "current")
-      #   autostart true
-      #   user deploy[:user]
-      # end
-      #
-      # supervisor_service application do
-      #   action :nothing
-      #   only_if "sleep 60"
-      #   subscribes :restart, "gunicorn_config[#{gunicorn_command}]", :delayed
-      #   subscribes :restart, "template[#{django_cfg}]", :delayed
-      # end
+      supervisor_service application do
+        action :nothing
+        only_if "sleep 60"
+        subscribes :restart, "gunicorn_config[#{gunicorn_command}]", :delayed
+        subscribes :restart, "template[#{django_cfg}]", :delayed
+      end
     end
 
     celery = Hash.new
