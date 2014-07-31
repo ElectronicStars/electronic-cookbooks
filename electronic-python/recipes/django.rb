@@ -2,8 +2,10 @@
 # Cookbook Name:: opsworks_deploy_python
 # Recipe:: django
 #
-
+Chef::Log.info(node[:deploy])
 node[:deploy].each do |application, deploy|
+  Chef::Log.info("lolazo")
+
   django_setup do
     deploy_data deploy
     app_name application

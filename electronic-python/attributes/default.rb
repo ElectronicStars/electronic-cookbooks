@@ -1,4 +1,4 @@
-include_attribute "deploy"
+# include_attribute "deploy"
 include_attribute "electronic-python::django"
 include_attribute "electronic-python::buildout"
 

@@ -1,4 +1,4 @@
-name             "opsworks_deploy_python"
+name             "electronic-python"
 maintainer       "Alec Mitchell"
 maintainer_email "alecpm@gmail.com"
 license          "BSD License"
@@ -16,6 +16,6 @@ depends "scm_helper"
 depends "apt"
 
 
-recipe "opsworks_deploy_python", "Install and setup a python application in a virtualenv"
-recipe "opsworks_deploy_python::buildout", "Install and setup a buildout based python application"
-recipe "opsworks_deploy_python::django", "Install and setup a django based python application"
+# recipe "opsworks_deploy_python", "Install and setup a python application in a virtualenv"
+# recipe "opsworks_deploy_python::buildout", "Install and setup a buildout based python application"
+# recipe "opsworks_deploy_python::django", "Install and setup a django based python application"
