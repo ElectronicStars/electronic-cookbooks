@@ -33,7 +33,7 @@ define :django_configure do
   deploy = params[:deploy_data]
   application = params[:app_name]
   run_action = params[:run_action] || :restart
-
+  Chef::Log.info("run_action =" + run_action)
   # Make sure we have up to date attribute settings
   deploy = node[:deploy][application]
 
