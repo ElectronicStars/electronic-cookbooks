@@ -39,6 +39,7 @@ define :django_configure do
 
 
   if deploy[:deploy_to] && (node[:deploy][application]["initially_deployed"] || ::File.exist?(deploy[:deploy_to]))
+    Chef::Log.info("LOLAZO ESTOY ENTRADO AKIII")
     # django_cfg = ::File.join(deploy[:deploy_to], 'current', Helpers.django_setting(deploy, 'settings_file', node))
     # # Create local config settings
     # template django_cfg do

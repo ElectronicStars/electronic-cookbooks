@@ -41,9 +41,9 @@ node[:deploy].each do |application, deploy|
     app_name application
     run_action [] # Don't run actions here
   end
-  supervisor_service application do
-    action :restart
-  end
+  # supervisor_service application do
+  #   action :restart
+  # end
   # Migration
   # if deploy["migrate"] && deploy["migration_command"]
   #   migration_command = "#{::File.join(deploy["venv"], "bin", "python")} #{deploy["migration_command"]}"
