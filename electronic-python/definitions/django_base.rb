@@ -103,7 +103,7 @@ define :django_configure do
         action :nothing
         only_if "sleep 60"
         subscribes :restart, "gunicorn_config[#{gunicorn_command}]", :delayed
-        subscribes :restart, "template[#{django_cfg}]", :delayed
+        # subscribes :restart, "template[#{django_cfg}]", :delayed
       end
     end
 
