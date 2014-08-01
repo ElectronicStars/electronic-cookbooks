@@ -6,23 +6,6 @@ define :django_setup do
     deploy_data deploy
     app_name application
   end
-
-  # # Merge gunicorn settings hashes
-  gunicorn = Hash.new
-  gunicorn.update node["deploy_django"]["gunicorn"] || {}
-  gunicorn.update deploy["django_gunicorn"] || {}
-  gunicorn["enabled"] = true
-  node.normal[:deploy][application]["django_gunicorn"] = gunicorn
-
-  if gunicorn["enabled"]
-    python_pip "gunicorn" do
-      virtualenv ::File.join(deploy[:deploy_to], 'shared', 'env')
-      user deploy[:user]
-      group deploy[:group]
-      action :install
-    end
-  end
-
   celery = Hash.new
   celery.update node["deploy_django"]["celery"] || {}
   celery.update deploy["django_celery"] || {}
@@ -34,30 +17,16 @@ define :django_configure do
   deploy = params[:deploy_data]
   application = params[:app_name]
   run_action = params[:run_action] || :restart
-  # Chef::Log.info("run_action =" + run_action)
+
   # Make sure we have up to date attribute settings
   deploy = node[:deploy][application]
 
 
   if deploy[:deploy_to] && (node[:deploy][application]["initially_deployed"] || ::File.exist?(deploy[:deploy_to]))
     Chef::Log.info("LOLAZO ESTOY ENTRADO AKIII")
-    # django_cfg = ::File.join(deploy[:deploy_to], 'current', Helpers.django_setting(deploy, 'settings_file', node))
-    # # Create local config settings
-    # template django_cfg do
-    #   source Helpers.django_setting(deploy, 'settings_template', node) || "settings.py.erb"
-    #   cookbook deploy["django_settings_cookbook"] || 'electronic-python'
-    #   owner deploy[:user]
-    #   group deploy[:group]
-    #   mode 0644
-    #   variables Hash.new
-    #   variables.update deploy
-    #   variables.update :django_database => Helpers.django_setting(deploy, 'database', node)
-    # end
 
-    gunicorn = Hash.new
-    gunicorn.update node["deploy_django"]["gunicorn"] || {}
-    gunicorn.update deploy["django_gunicorn"] || {}
-    node.normal[:deploy][application]["django_gunicorn"] = gunicorn
+
+
 
     if gunicorn["enabled"]
       include_recipe 'supervisor'
