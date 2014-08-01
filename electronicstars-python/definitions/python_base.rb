@@ -122,3 +122,109 @@ define :python_base_setup do
   end
 
 end
+
+
+define :python_base_deploy do
+  deploy = params[:deploy_data]
+  application = params[:app_name]
+
+  # Merge symlink values from node default definitions
+  ['symlink_before_migrate', 'purge_before_symlink', 'create_dirs_before_symlink'].each do |attr|
+    if node["deploy_#{deploy[:custom_type]}"] && node["deploy_#{deploy[:custom_type]}"][attr]
+      begin
+        values = {}
+        values.update(node["deploy_python"][attr] || {})
+        values.update(node["deploy_#{deploy[:custom_type]}"][attr] || {})
+        values.update(node[:deploy][application][attr] || {})
+      rescue
+        values = []
+        values.concat(node["deploy_python"][attr] || [])
+        values.concat(node["deploy_#{deploy[:custom_type]}"][attr] || [])
+        values.concat(node[:deploy][application][attr] || [])
+      end
+      node.normal[:deploy][application][attr] = values
+    end
+  end
+
+  # Opsworks deploy doesn't pass through :create_dirs_before_symlink,
+  # so we need to take care of it ourselves
+  (node[:deploy][application]["create_dirs_before_symlink"] || []).each do |dirname|
+    directory ::File.join(deploy[:deploy_to], "shared", dirname) do
+      owner deploy[:user]
+      group deploy[:group]
+      mode 0750
+      recursive true
+      action :create
+    end
+  end
+
+  if deploy[:scm]
+    opsworks_deploy do
+      deploy_data deploy
+      app application
+    end
+
+    # Deploy recipe doesn't pass these through and we can only access the dirs after deployment
+    (node[:deploy][application]["purge_before_symlink"] || []).each do |dirname|
+      dir_path = ::File.join(deploy[:deploy_to], 'current', dirname)
+      directory dir_path do
+        recursive true
+        action :delete
+        only_if "test -d '#{dir_path}'"
+      end
+      # Now we create those links (possibly deleting them first to avoid deploy's duplicates)
+      if node[:deploy][application]["symlink_before_migrate"].has_value? dirname
+        shared_dirname = node[:deploy][application]["symlink_before_migrate"].key(dirname)
+        shared_path = ::File.join(deploy[:deploy_to], 'shared', shared_dirname)
+        Chef::Log.debug("Relinking #{shared_path} and deleting stray link #{shared_path}/#{dirname}")
+        link ::File.join(shared_path, dirname) do
+          action :delete
+        end
+        link dir_path do
+          link_type :symbolic
+          to shared_path
+          owner deploy[:user]
+          group deploy[:group]
+          action [:delete, :create]
+          only_if "test -e #{::File.join(deploy[:deploy_to], 'current')}"
+        end
+      end
+    end
+
+    node.set[:deploy][application]["initially_deployed"] = true
+  else
+    node.set[:deploy][application]["initially_deployed"] = false
+    Chef::Log.error("Could not deploy app #{application} no SCM repository set")
+  end
+
+  # Setup venv
+  venv_path = ::File.join(deploy[:deploy_to], 'shared', 'env')
+  node.normal[:deploy][application]["venv"] = venv_path
+  python_virtualenv application + '-venv' do
+    path venv_path
+    owner deploy[:user]
+    group deploy[:group]
+    action :create
+  end
+
+  os_packages = deploy["os_packages"] ? deploy["os_packages"] : node["deploy_python"]["os_packages"]
+  # Install os dependencies
+  os_packages.each do |pkg, ver|
+    package pkg do
+      action :install
+      version ver if ver && ver.length > 0
+    end
+  end
+
+  packages = deploy["packages"] ? deploy["packages"] : node["deploy_python"]["packages"]
+  # Install pip dependencies
+  packages.each do |name, ver|
+    python_pip name do
+      version ver if ver && ver.length > 0
+      virtualenv venv_path
+      user deploy[:user]
+      group deploy[:group]
+      action :install
+    end
+  end
+end
