@@ -50,7 +50,7 @@ node[:deploy].each do |application, deploy|
     host "127.0.0.1"
     port 8080
     worker_processes 4
-    app "#{application}.wsgi::application"
+    app "#{application}.wsgi:application"
   end
 
 
