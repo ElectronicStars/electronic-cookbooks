@@ -38,11 +38,19 @@ node[:deploy].each do |application, deploy|
   end
 
 
-  execute "uwsgi --http :8080 --module #{application}.wsgi" do
-    cwd ::File.join(deploy[:deploy_to], 'current')
-    user deploy[:user]
-    group deploy[:group]
+  # execute "uwsgi --http :8080 --module #{application}.wsgi" do
+  #   cwd ::File.join(deploy[:deploy_to], 'current')
+  #   user deploy[:user]
+  #   group deploy[:group]
+  #
+  # end
+  uwsgi_service application do
+    home_path ::File.join(deploy[:deploy_to], 'current')
 
+    host "127.0.0.1"
+    port 8080
+    worker_processes 4
+    app "#{application}.wsgi::application"
   end
 
 
