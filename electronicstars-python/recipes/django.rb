@@ -48,8 +48,8 @@ node[:deploy].each do |application, deploy|
     home_path ::File.join(deploy[:deploy_to], 'current')
 
     host "127.0.0.1"
-    port 8080
-    worker_processes 2
+    port 8000
+    worker_processes 1
     uid deploy[:user]
     gid deploy[:group]
     app "wsgi"
