@@ -53,7 +53,7 @@ node[:deploy].each do |application, deploy|
     worker_processes 1
     uid deploy[:user]
     gid deploy[:group]
-    app "wsgi"
+    app "wsgi:application"
   end
 
 
