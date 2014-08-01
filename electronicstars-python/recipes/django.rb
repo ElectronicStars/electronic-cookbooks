@@ -36,13 +36,14 @@ node[:deploy].each do |application, deploy|
     app_name application
     run_action [] # Don't run actions here
   end
-  uwsgi_service application do
-    home_path ::File.join(deploy[:deploy_to], 'current')
-    pid_path "/var/run/uwsgi-app.pid"
-    host "127.0.0.1"
-    port 8080
-    worker_processes 4
-    app application+".wsgi"
+
+
+  execute "uwsgi --http :8080 --module #{application}.wsgi" do
+    cwd ::File.join(deploy[:deploy_to], 'current')
+    user deploy[:user]
+    group deploy[:group]
+
   end
+
 
 end
