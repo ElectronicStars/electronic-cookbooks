@@ -49,7 +49,9 @@ node[:deploy].each do |application, deploy|
 
     host "127.0.0.1"
     port 8080
-    worker_processes 4
+    worker_processes 2
+    uid deploy[:user]
+    gid deploy[:group]
     app "wsgi"
   end
 

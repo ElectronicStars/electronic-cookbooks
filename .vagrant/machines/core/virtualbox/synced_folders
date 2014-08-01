@@ -1,0 +1,1 @@
+{"virtualbox":{"/vagrant":{"guestpath":"/vagrant","hostpath":"E:/ElectronicStars/electronic-cookbooks","disabled":false},"v-csc-1":{"id":"v-csc-1","guestpath":"/tmp/vagrant-chef-2/chef-solo-1/cookbooks","hostpath":"C:/Users/Miguel/.berkshelf/core/vagrant/berkshelf-20140731-8344-1m2cd8o-core","disabled":false}}}
