@@ -12,24 +12,20 @@ Vagrant::Config.run do |config|
 
     django_config.vm.box = "hashicorp/precise32"
     django_config.vm.box_url = "https://vagrantcloud.com/hashicorp/precise32/version/1/provider/virtualbox.box"
-    django_config.vm.forward_port 80, 8080
+    django_config.vm.forward_port 800, 8081
     django_config.gui = true
     # django_config.vm.provision :shell, :inline => 'apt-get update;  apt-get install python-software-properties --no-upgrade --yes; add-apt-repository ppa:brightbox/ruby-ng-experimental; apt-get update'
     # django_config.vm.provision :shell, :inline => 'if [[ `chef-solo --version` != *11.10* ]]; then apt-get install build-essential bash-completion ruby2.0 ruby2.0-dev --no-upgrade --yes; gem2.0 install chef --version 11.10.0 --no-rdoc --no-ri --conservative; fi'
 
     django_config.vm.provision :chef_solo do |chef|
       chef.log_level = :info
-
+      chef.cookbooks_path = "electronicstars-angular"
 
       chef.json = {
-          "deploy" => {
-              "core" => {
-                  "custom_type" => "django"
-              }
-          }
+
       }
       chef.run_list = [
-          "recipe[electronic-python::django]",
+          "recipe[electronicstars-angular::angular-setup]",
       # "recipe[electronic-python::django-configure]",
       ]
     end
