@@ -5,8 +5,8 @@ cookbook 'mongodb'
 cookbook 'rabbitmq'
 cookbook 'redisio'
 cookbook 'npm'
-cookbook 'nodejs', {:git => 'git@github.com:mdxp/nodejs-cookbook.git'}
-# cookbook 'nodejs', {:github => "git@github.com:mdxp/nodejs-cookbook.git"}
+cookbook 'nodejs'
+         # cookbook 'nodejs', {:github => "git@github.com:mdxp/nodejs-cookbook.git"}
 cookbook 'varnish'
 cookbook 'gunicorn'
 cookbook 'supervisor'
@@ -26,7 +26,7 @@ cookbook 'uwsgi'
 # def opsworks_cookbook(name)
 #   cookbook name, {:github => "aws/opsworks-cookbooks", :rel => name, :tag => 'release-chef-11.10'}
 # end
-#
+# #
 # opsworks_cookbook 'deploy'
 # opsworks_cookbook 'dependencies'
 # opsworks_cookbook 'gem_support'
