@@ -31,16 +31,7 @@ define :django_configure do
     celery.update deploy["django_celery"] || {}
     node.normal[:deploy][application]["django_celery"] = celery
 
-    include_recipe 'supervisor'
-    base_command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'uwsgi')} --http :8080 --module wsgi"
-    supervisor_service application do
-      action :enable
-      environment {}
-      command base_command
-      directory ::File.join(deploy[:deploy_to], "current")
-      autostart true
-      user deploy[:user]
-    end
+
 
 
     if celery["djcelery"] && celery["enabled"]
