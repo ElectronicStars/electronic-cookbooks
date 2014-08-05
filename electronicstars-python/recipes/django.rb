@@ -43,8 +43,13 @@ node[:deploy].each do |application, deploy|
     environment {}
     command base_command
     directory ::File.join(deploy[:deploy_to], "current")
-    autostart true
+    autostart false
     user deploy[:user]
+  end
+
+  supervisor_service application do
+    action :start
+    
   end
 
 
