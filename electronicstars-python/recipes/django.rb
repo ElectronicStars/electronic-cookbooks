@@ -37,17 +37,31 @@ node[:deploy].each do |application, deploy|
     run_action [] # Don't run actions here
   end
   uwsgi_bin = File.join(deploy[:deploy_to], 'shared/env/bin/uwsgi')
-  uwsgi_service application do
-    uwsgi_bin uwsgi_bin
-    home_path ::File.join(deploy[:deploy_to], 'current')
-    host "127.0.0.1"
-    port 8080
-    pid_path "/var/run/uwsgi-app.pid"
-    worker_processes 1
-    uid deploy[:user]
-    gid deploy[:group]
-    app "wsgi"
+
+  command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'uwsgi')} -s 127.0.0.1:8080 --disable-logging --wsgi-file wsgi.py --processes 1"
+
+  supervisor_service application do
+    directory ::File.join(deploy[:deploy_to], "current")
+    command command
+    user deploy[:user]
+    stdout_logfile "syslog"
+    stderr_logfile "syslog"
+    startsecs 10
+    stopsignal "QUIT"
+    stopasgroup true
+    killasgroup true
   end
+  # uwsgi_service application do
+  #   uwsgi_bin uwsgi_bin
+  #   home_path ::File.join(deploy[:deploy_to], 'current')
+  #   host "127.0.0.1"
+  #   port 8080
+  #   pid_path "/var/run/uwsgi-app.pid"
+  #   worker_processes 1
+  #   uid deploy[:user]
+  #   gid deploy[:group]
+  #   app "wsgi"
+  # end
   # include_recipe "supervisor"
   base_command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'uwsgi')} --http :8000 --module wsgi"
   # supervisor_service application do
