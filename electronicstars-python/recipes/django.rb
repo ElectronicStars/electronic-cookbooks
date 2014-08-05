@@ -46,7 +46,7 @@ node[:deploy].each do |application, deploy|
     worker_processes 1
     uid deploy[:user]
     gid deploy[:group]
-    app "wsgi:application"
+    app "wsgi"
   end
   # include_recipe "supervisor"
   base_command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'uwsgi')} --http :8000 --module wsgi"
