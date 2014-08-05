@@ -40,17 +40,17 @@ node[:deploy].each do |application, deploy|
   base_command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'uwsgi')} --http :8080 --module wsgi"
   supervisor_service application do
     action :enable
-    environment {}
+
     command base_command
     directory ::File.join(deploy[:deploy_to], "current")
-    autostart false
+    autostart true
     user deploy[:user]
   end
 
-  supervisor_service application do
-    action :start
-    
-  end
+  # supervisor_service application do
+  #   action :start
+  #
+  # end
 
 
   # execute "uwsgi --http :8080 --module #{application}.wsgi" do
