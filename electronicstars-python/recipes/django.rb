@@ -49,14 +49,20 @@ node[:deploy].each do |application, deploy|
   #   app "wsgi:application"
   #
   # end
-  include_recipe "supervisor"
+  # include_recipe "supervisor"
   base_command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'uwsgi')} --http :8080 --module wsgi"
-  supervisor_service application do
-    command base_command
-    directory ::File.join(deploy[:deploy_to], "current")
-    autostart false
+  # supervisor_service application do
+  #   command base_command
+  #   directory ::File.join(deploy[:deploy_to], "current")
+  #   autostart false
+  #   user deploy[:user]
+  #   action :enable
+  # end
+  execute base_command do
+    cwd ::File.join(deploy[:deploy_to], 'current')
     user deploy[:user]
-    action :enable
+    group deploy[:group]
+    environment ({'HOME' => '/home/deploy'})
   end
 
   # supervisor_service application do
