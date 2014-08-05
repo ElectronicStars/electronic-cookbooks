@@ -9,7 +9,12 @@ define :django_setup do
   celery.update node["deploy_django"]["celery"] || {}
   celery.update deploy["django_celery"] || {}
   node.normal[:deploy][application]["django_celery"] = celery
-
+  python_pip "uwsgi" do
+    user deploy[:user]
+    group deploy[:group]
+    virtualenv ::File.join(deploy[:deploy_to], 'shared', 'env')
+    action :install
+  end
 end
 
 define :django_configure do

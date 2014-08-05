@@ -101,7 +101,7 @@ define :python_base_setup do
   venv_options = deploy["venv_options"] || node["deploy_python"]["venv_options"]
   venv_path = ::File.join(deploy[:deploy_to], "shared", "env")
   Chef::Log.debug("*****************************************")
-  Chef::Log.debug("venv_path #{venv_path} for #{application}")
+  Chef::Log.debug("venv_patha #{venv_path} for #{application}")
   Chef::Log.debug("*****************************************")
   node.normal[:deploy][application]["venv"] = venv_path
   python_virtualenv "#{application}-venv" do

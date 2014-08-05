@@ -48,7 +48,7 @@ node[:deploy].each do |application, deploy|
   uwsgi_service application do
     home_path ::File.join(deploy[:deploy_to], 'current')
     host "127.0.0.1"
-    port 80
+    port 8080
     pid_path "/var/run/uwsgi-app.pid"
     worker_processes 1
     uid deploy[:user]
