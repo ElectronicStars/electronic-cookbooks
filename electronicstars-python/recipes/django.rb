@@ -44,8 +44,10 @@ node[:deploy].each do |application, deploy|
   #   group deploy[:group]
   #
   # end
-
+  uwsgi_bin = File.join(deploy[:deploy_to], 'shared/env/bin/uwsgi')
+  Chef::Log.info("uwsgi_bin :" + uwsgi_bin)
   uwsgi_service application do
+    uwsgi_bin uwsgi_bin
     home_path ::File.join(deploy[:deploy_to], 'current')
     host "127.0.0.1"
     port 8080
@@ -54,7 +56,7 @@ node[:deploy].each do |application, deploy|
     uid deploy[:user]
     gid deploy[:group]
     app "wsgi:application"
-    uwsgi_bin File.join(deploy[:deploy_to], 'shared/env/bin/uwsgi')
+
   end
 
 
