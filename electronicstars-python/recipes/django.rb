@@ -50,7 +50,7 @@ node[:deploy].each do |application, deploy|
   #
   # end
   # include_recipe "supervisor"
-  base_command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'uwsgi')} --http :8080 --module wsgi"
+  base_command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'uwsgi')} --http :8000 --module wsgi"
   # supervisor_service application do
   #   command base_command
   #   directory ::File.join(deploy[:deploy_to], "current")
