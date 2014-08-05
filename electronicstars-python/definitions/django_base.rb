@@ -32,9 +32,7 @@ define :django_configure do
     node.normal[:deploy][application]["django_celery"] = celery
 
     include_recipe 'supervisor'
-    base_command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'python')} manage.py run_server"
-
-
+    base_command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'python')} manage.py runserver"
     supervisor_service application do
       action :enable
       environment {}
