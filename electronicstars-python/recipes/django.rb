@@ -54,6 +54,7 @@ node[:deploy].each do |application, deploy|
     uid deploy[:user]
     gid deploy[:group]
     app "wsgi:application"
+    uwsgi_bin File.join(deploy[:deploy_to], 'shared/env/bin/uwsgi')
   end
 
 
