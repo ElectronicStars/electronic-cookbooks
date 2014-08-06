@@ -41,8 +41,9 @@ node[:deploy].each do |application, deploy|
   supervisor_service application do
     directory ::File.join(deploy[:deploy_to], "current")
     command command
-    user deploy[:user]
+    user 'root'
     autostart true
+    autorestart true
     action :enable
     stderr_logfile ::File.join(deploy[:deploy_to], "current", "log", "error.log")
     stdout_logfile ::File.join(deploy[:deploy_to], "current", "log", "current.log")
