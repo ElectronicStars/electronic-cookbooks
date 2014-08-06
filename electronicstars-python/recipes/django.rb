@@ -38,14 +38,13 @@ node[:deploy].each do |application, deploy|
   end
   uwsgi_bin = File.join(deploy[:deploy_to], 'shared/env/bin/uwsgi')
 
-  command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'uwsgi')} -s 127.0.0.1:8080 --disable-logging --wsgi-file wsgi.py --processes 1"
+  command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'uwsgi')} --http :8000 --module wsgi"
 
-  supervisor_service 'web' do
+  supervisor_service application do
     directory ::File.join(deploy[:deploy_to], "current")
     command command
     user deploy[:user]
-    stdout_logfile "syslog"
-    stderr_logfile "syslog"
+ 
     startsecs 10
     stopsignal "QUIT"
     stopasgroup true

@@ -9,7 +9,7 @@ cookbook 'nodejs'
 # cookbook 'nodejs', {:github => "git@github.com:mdxp/nodejs-cookbook.git"}
 cookbook 'varnish'
 cookbook 'gunicorn'
-cookbook 'supervisor'
+cookbook 'supervisor', {:git => "git@github.com:poise/supervisor.git", :branch => 'master'}
 cookbook 'build-essential'
 cookbook 'apt'
 cookbook 'yum'

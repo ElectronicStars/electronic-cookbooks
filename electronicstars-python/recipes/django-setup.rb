@@ -4,5 +4,6 @@ node[:deploy].each do |application, deploy|
     deploy_data deploy
     app_name application
   end
-  
+  # include_recipe 'nginx::default'
+
 end

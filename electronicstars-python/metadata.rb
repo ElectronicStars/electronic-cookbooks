@@ -13,5 +13,6 @@ depends "uwsgi"
 depends "supervisor"
 depends "scm_helper"
 depends "apt"
+depends "nginx"
 
 
