@@ -43,11 +43,9 @@ node[:deploy].each do |application, deploy|
     command command
     user deploy[:user]
     autostart true
-    startsecs 10
     action :enable
-  end
-  supervisor_service application do
-    action :start
+    stderr_logfile ::File.join(deploy[:deploy_to], "current", "logs", "error.log")
+    stdout_logfile ::File.join(deploy[:deploy_to], "current", "logs", "current.log")
   end
 
 
