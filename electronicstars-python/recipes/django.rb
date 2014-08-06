@@ -37,7 +37,7 @@ node[:deploy].each do |application, deploy|
     run_action [] # Don't run actions here
   end
 
-  command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'uwsgi')} --http :80 --module wsgi"
+  command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'uwsgi')} --http :80 --module wsgi --socket /tmp/mike.sock"
   supervisor_service application do
     directory ::File.join(deploy[:deploy_to], "current")
     command command
