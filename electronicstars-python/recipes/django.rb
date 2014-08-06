@@ -36,61 +36,16 @@ node[:deploy].each do |application, deploy|
     app_name application
     run_action [] # Don't run actions here
   end
-  uwsgi_bin = File.join(deploy[:deploy_to], 'shared/env/bin/uwsgi')
 
   command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'uwsgi')} --http :80 --module wsgi"
-
   supervisor_service application do
     directory ::File.join(deploy[:deploy_to], "current")
     command command
     user deploy[:user]
-
+    autostart true
     startsecs 10
-    stopsignal "QUIT"
-    stopasgroup true
-    killasgroup true
+    action :enable
   end
-  # uwsgi_service application do
-  #   uwsgi_bin uwsgi_bin
-  #   home_path ::File.join(deploy[:deploy_to], 'current')
-  #   host "127.0.0.1"
-  #   port 8080
-  #   pid_path "/var/run/uwsgi-app.pid"
-  #   worker_processes 1
-  #   uid deploy[:user]
-  #   gid deploy[:group]
-  #   app "wsgi"
-  # end
-  # include_recipe "supervisor"
-  base_command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'uwsgi')} --http :8000 --module wsgi"
-  # supervisor_service application do
-  #   command base_command
-  #   directory ::File.join(deploy[:deploy_to], "current")
-  #   autostart false
-  #   user deploy[:user]
-  #   action :enable
-  # end
-  # execute base_command do
-  #   cwd ::File.join(deploy[:deploy_to], 'current')
-  #   user deploy[:user]
-  #   group deploy[:group]
-  #   environment ({'HOME' => '/home/deploy'})
-  # end
-
-  # supervisor_service application do
-  #   action :start
-  #
-  # end
-
-
-  # execute "uwsgi --http :8080 --module #{application}.wsgi" do
-  #   cwd ::File.join(deploy[:deploy_to], 'current')
-  #   user deploy[:user]
-  #   group deploy[:group]
-  #
-  # end
-  # uwsgi_bin = File.join(deploy[:deploy_to], 'shared/env/bin/uwsgi')
-  # Chef::Log.info("uwsgi_bin :" + uwsgi_bin)
 
 
 end
