@@ -44,8 +44,8 @@ node[:deploy].each do |application, deploy|
     user deploy[:user]
     autostart true
     action :enable
-    stderr_logfile ::File.join(deploy[:deploy_to], "current", "logs", "error.log")
-    stdout_logfile ::File.join(deploy[:deploy_to], "current", "logs", "current.log")
+    stderr_logfile ::File.join(deploy[:deploy_to], "current", "log", "error.log")
+    stdout_logfile ::File.join(deploy[:deploy_to], "current", "log", "current.log")
   end
 
 
