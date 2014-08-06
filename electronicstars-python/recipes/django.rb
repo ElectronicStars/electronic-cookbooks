@@ -46,6 +46,9 @@ node[:deploy].each do |application, deploy|
     startsecs 10
     action :enable
   end
+  supervisor_service application do
+    action :start
+  end
 
 
 end
