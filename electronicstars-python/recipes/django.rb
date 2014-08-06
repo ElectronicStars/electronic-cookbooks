@@ -40,7 +40,7 @@ node[:deploy].each do |application, deploy|
 
   command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'uwsgi')} -s 127.0.0.1:8080 --disable-logging --wsgi-file wsgi.py --processes 1"
 
-  supervisor_service application do
+  supervisor_service 'web' do
     directory ::File.join(deploy[:deploy_to], "current")
     command command
     user deploy[:user]
