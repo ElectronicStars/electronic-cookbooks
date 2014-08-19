@@ -37,7 +37,14 @@ node[:deploy].each do |application, deploy|
     run_action [] # Don't run actions here
   end
 
-  command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'uwsgi')} --http :80 --module wsgi --socket /tmp/mike.sock"
+  cmd = deploy["django_collect_static"].is_a?(String) ? deploy["django_collect_static"] : "collectstatic --noinput"
+  execute "#{::File.join(node[:deploy][application]["venv"], "bin", "python")} manage.py #{cmd}" do
+    cwd ::File.join(deploy[:deploy_to], 'current')
+    user deploy[:user]
+    group deploy[:group]
+  end
+  
+  command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'uwsgi')} --http :80 --gevent 200 --http-webscokets --module wswsgi --socket /tmp/mike.sock"
   supervisor_service application do
     directory ::File.join(deploy[:deploy_to], "current")
     command command
@@ -47,6 +54,10 @@ node[:deploy].each do |application, deploy|
     action :enable
     stderr_logfile ::File.join(deploy[:deploy_to], "current", "log", "error.log")
     stdout_logfile ::File.join(deploy[:deploy_to], "current", "log", "current.log")
+  end
+
+  supervisor_service application do
+    action :reload
   end
 
 
