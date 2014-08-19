@@ -43,7 +43,7 @@ node[:deploy].each do |application, deploy|
     user deploy[:user]
     group deploy[:group]
   end
-  
+
   command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'uwsgi')} --http :80 --gevent 200 --http-webscokets --module wswsgi --socket /tmp/mike.sock"
   supervisor_service application do
     directory ::File.join(deploy[:deploy_to], "current")
@@ -57,7 +57,7 @@ node[:deploy].each do |application, deploy|
   end
 
   supervisor_service application do
-    action :reload
+    action :restart
   end
 
 
