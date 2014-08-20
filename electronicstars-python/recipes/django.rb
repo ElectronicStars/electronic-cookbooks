@@ -56,6 +56,21 @@ node[:deploy].each do |application, deploy|
     stdout_logfile ::File.join(deploy[:deploy_to], "current", "log", "current.log")
   end
 
+  celery = "celery-#{application}"
+  celery_command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'python')} manage.py celeryd"
+  supervisor_service celery do
+    directory ::File.join(deploy[:deploy_to], "current")
+    command celery_command
+    user deploy[:user]
+    autostart true
+    autorestart true
+    action :enable
+    # stderr_logfile ::File.join(deploy[:deploy_to], "current", "log", "error.log")
+    # stdout_logfile ::File.join(deploy[:deploy_to], "current", "log", "current.log")
+  end
+  supervisor_service celery do
+    action :restart
+  end
   supervisor_service application do
     action :restart
   end

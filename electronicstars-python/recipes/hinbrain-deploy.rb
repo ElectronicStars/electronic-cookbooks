@@ -37,7 +37,7 @@ node[:deploy].each do |application, deploy|
     run_action [] # Don't run actions here
   end
   commandCelery = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'celery')}  -A backend worker -l inf"
-    supervisor_service application do
+    supervisor_service "celery-#{application}" do
       directory ::File.join(deploy[:deploy_to], "current")
       command command
       user deploy[:user]
