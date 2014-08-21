@@ -65,8 +65,8 @@ node[:deploy].each do |application, deploy|
     autostart true
     autorestart true
     action :enable
-    # stderr_logfile ::File.join(deploy[:deploy_to], "current", "log", "error.log")
-    # stdout_logfile ::File.join(deploy[:deploy_to], "current", "log", "current.log")
+    stderr_logfile ::File.join(deploy[:deploy_to], "current", "log", "error_celery.log")
+    stdout_logfile ::File.join(deploy[:deploy_to], "current", "log", "current_celery.log")
   end
   supervisor_service celery do
     action :restart
