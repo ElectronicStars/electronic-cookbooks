@@ -57,11 +57,11 @@ node[:deploy].each do |application, deploy|
   end
 
   celery = "celery-#{application}"
-  celery_command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'python')} manage.py celeryd"
+  celery_command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'python')} manage.py celeryd -E -l info -c 2"
   supervisor_service celery do
     directory ::File.join(deploy[:deploy_to], "current")
     command celery_command
-    user deploy[:user]
+    user 'root'
     autostart true
     autorestart true
     action :enable
