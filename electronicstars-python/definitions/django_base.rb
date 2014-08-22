@@ -25,13 +25,12 @@ define :django_configure do
   Chef::Log.info(run_action)
   # Make sure we have up to date attribute settings
   deploy = node[:deploy][application]
+  include_recipe 'supervisor'
   if deploy[:deploy_to] && (node[:deploy][application]["initially_deployed"] || ::File.exist?(deploy[:deploy_to]))
     celery = Hash.new
     celery.update node["deploy_django"]["celery"] || {}
     celery.update deploy["django_celery"] || {}
     node.normal[:deploy][application]["django_celery"] = celery
-
-
 
 
     if celery["djcelery"] && celery["enabled"]
