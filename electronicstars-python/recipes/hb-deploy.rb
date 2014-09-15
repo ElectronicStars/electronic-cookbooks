@@ -40,7 +40,7 @@ node[:deploy].each do |application, deploy|
   commandCelery = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'celery')} worker --app=backend.celery"
   supervisor_service celery do
     directory ::File.join(deploy[:deploy_to], "current")
-    command command
+    command commandCelery
     user "root"
     autostart true
     autorestart true
@@ -62,9 +62,9 @@ node[:deploy].each do |application, deploy|
   supervisor_service celery do
     action :restart
   end
-  # supervisor_service application do
-  #   action :restart
-  # end
+  supervisor_service application do
+    action :restart
+  end
 
 
 end
