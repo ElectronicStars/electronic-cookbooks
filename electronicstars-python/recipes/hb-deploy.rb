@@ -59,12 +59,12 @@ node[:deploy].each do |application, deploy|
     action :enable
 
   end
-  supervisor_service celery do
-    action :restart
-  end
-  supervisor_service application do
-    action :restart
-  end
+  # supervisor_service celery do
+  #   action :restart
+  # end
+  # supervisor_service application do
+  #   action :restart
+  # end
 
 
 end
