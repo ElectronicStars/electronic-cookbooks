@@ -57,20 +57,20 @@ node[:deploy].each do |application, deploy|
   end
 
   celery = "celery-#{application}"
-  celery_command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'python')} manage.py celeryd -E -l info -c 2"
-  # supervisor_service celery do
-  #   directory ::File.join(deploy[:deploy_to], "current")
-  #   command celery_command
-  #   user 'root'
-  #   autostart true
-  #   autorestart true
-  #   action :enable
-  #   stderr_logfile ::File.join(deploy[:deploy_to], "current", "log", "error_celery.log")
-  #   stdout_logfile ::File.join(deploy[:deploy_to], "current", "log", "current_celery.log")
-  # end
-  # supervisor_service celery do
-  #   action :restart
-  # end
+  celery_command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'celery')} worker --app=engines.celery"
+  supervisor_service celery do
+    directory ::File.join(deploy[:deploy_to], "current")
+    command celery_command
+    user 'root'
+    autostart true
+    autorestart true
+    action :enable
+    stderr_logfile ::File.join(deploy[:deploy_to], "current", "log", "error_celery.log")
+    stdout_logfile ::File.join(deploy[:deploy_to], "current", "log", "current_celery.log")
+  end
+  supervisor_service celery do
+    action :restart
+  end
   supervisor_service application do
     action :restart
   end
