@@ -37,7 +37,7 @@ node[:deploy].each do |application, deploy|
     run_action [] # Don't run actions here
   end
   celery = "celery-#{application}"
-  commandCelery = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'celery')}  -A backend worker -l inf"
+  commandCelery = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'celery')} worker --app=backend.celery"
   supervisor_service celery do
     directory ::File.join(deploy[:deploy_to], "current")
     command command
