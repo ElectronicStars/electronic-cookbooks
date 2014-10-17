@@ -44,8 +44,9 @@ node[:deploy].each do |application, deploy|
     user "root"
     autostart true
     autorestart true
-    stderr_logfile ::File.join(deploy[:deploy_to], "current", "log", "error_celery.log")
-    stdout_logfile ::File.join(deploy[:deploy_to], "current", "log", "current_celery.log")
+    stderr_logfile ::File.join(deploy[:deploy_to], "shared", "log", "error_celery.log")
+    stdout_logfile ::File.join(deploy[:deploy_to], "shared", "log", "current_celery.log")
+
     action :enable
 
   end
@@ -56,18 +57,18 @@ node[:deploy].each do |application, deploy|
     user "root"
     autostart true
     autorestart true
-    stderr_logfile ::File.join(deploy[:deploy_to], "current", "log", "error.log")
-    stdout_logfile ::File.join(deploy[:deploy_to], "current", "log", "current.log")
+    stderr_logfile ::File.join(deploy[:deploy_to], "shared", "log", "error.log")
+    stdout_logfile ::File.join(deploy[:deploy_to], "shared", "log", "current.log")
     action :enable
 
 
   end
-  # supervisor_service celery do
-  #   action :restart
-  # end
-  # supervisor_service application do
-  #   action :restart
-  # end
+  supervisor_service celery do
+    action :restart
+  end
+  supervisor_service application do
+    action :restart
+  end
 
 
 end
