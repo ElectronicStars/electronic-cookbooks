@@ -49,7 +49,7 @@ node[:deploy].each do |application, deploy|
     action :enable
 
   end
-  command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'python')} backend.py -p csslisten -n dev_server1"
+  command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'python')} backend.py -p csslisten -n dev_server_csgo"
   supervisor_service application do
     directory ::File.join(deploy[:deploy_to], "current")
     command command
