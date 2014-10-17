@@ -56,15 +56,18 @@ node[:deploy].each do |application, deploy|
     user "root"
     autostart true
     autorestart true
+    stderr_logfile ::File.join(deploy[:deploy_to], "current", "log", "error.log")
+    stdout_logfile ::File.join(deploy[:deploy_to], "current", "log", "current.log")
     action :enable
 
+
   end
-  supervisor_service celery do
-    action :restart
-  end
-  supervisor_service application do
-    action :restart
-  end
+  # supervisor_service celery do
+  #   action :restart
+  # end
+  # supervisor_service application do
+  #   action :restart
+  # end
 
 
 end
