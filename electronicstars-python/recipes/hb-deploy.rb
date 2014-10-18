@@ -63,10 +63,25 @@ node[:deploy].each do |application, deploy|
 
 
   end
+  css = "css-#{application}"
+  command_css = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'python')} backend.py -p csslisten -n dev_server_css"
+  supervisor_service css do
+    directory ::File.join(deploy[:deploy_to], "current")
+    command command_css
+    user "root"
+    autostart true
+    autorestart true
+    # stderr_logfile ::File.join(deploy[:deploy_to], "shared", "log", "error.log")
+    # stdout_logfile ::File.join(deploy[:deploy_to], "shared", "log", "current.log")
+    action :enable
+  end
   supervisor_service celery do
     action :restart
   end
   supervisor_service application do
+    action :restart
+  end
+  supervisor_service css do
     action :restart
   end
 
