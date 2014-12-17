@@ -1,22 +1,24 @@
 source "https://supermarket.getchef.com"
-
+cookbook 'apt'
+cookbook 'build-essential'
+cookbook 'gunicorn'
+cookbook 'line'
 cookbook 'mongodb'
 cookbook 'rabbitmq'
 cookbook 'redisio'
-cookbook 'npm'
-cookbook 'nodejs'
+
 cookbook 'varnish'
-cookbook 'gunicorn'
+
 cookbook 'supervisor', {:git => "git@github.com:poise/supervisor.git", :branch => 'master'}
-cookbook 'build-essential'
-cookbook 'apt'
+
+
 cookbook 'yum'
 cookbook 'yum-epel'
 # cookbook 'git'
 # cookbook 'sqlite'
 cookbook 'ulimit'
 # cookbook 'nfs'
-cookbook 'line'
+
 cookbook 'python'
 cookbook 'runit'
 cookbook 'uwsgi', {:gitbub => "git@github.com:50onRed/uwsgi.git"}
