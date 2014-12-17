@@ -1,5 +1,3 @@
-source 'https://api.berkshelf.com'
-
 cookbook 'mongodb'
 cookbook 'rabbitmq'
 cookbook 'redisio'
