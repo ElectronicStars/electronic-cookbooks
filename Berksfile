@@ -1,27 +1,23 @@
 source "https://supermarket.getchef.com"
+
 cookbook 'apt'
 cookbook 'build-essential'
-cookbook 'gunicorn'
+
 cookbook 'line'
 cookbook 'mongodb'
+cookbook 'npm'
+cookbook 'nodejs'
 cookbook 'rabbitmq'
 cookbook 'redisio'
-
-cookbook 'varnish'
-
+cookbook 'runit'
 cookbook 'supervisor', {:git => "git@github.com:poise/supervisor.git", :branch => 'master'}
-
-
+cookbook 'python'
+cookbook 'ulimit'
+cookbook 'uwsgi', {:gitbub => "git@github.com:50onRed/uwsgi.git"}
+cookbook 'varnish'
 cookbook 'yum'
 cookbook 'yum-epel'
-# cookbook 'git'
-# cookbook 'sqlite'
-cookbook 'ulimit'
-# cookbook 'nfs'
 
-cookbook 'python'
-cookbook 'runit'
-cookbook 'uwsgi', {:gitbub => "git@github.com:50onRed/uwsgi.git"}
 
 # def opsworks_cookbook(name)
 #   cookbook name, {:github => "aws/opsworks-cookbooks", :rel => name, :tag => 'release-chef-11.10'}
