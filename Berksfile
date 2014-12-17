@@ -1,4 +1,3 @@
-site :opscode
 source 'https://api.berkshelf.com'
 
 cookbook 'mongodb'
@@ -6,7 +5,7 @@ cookbook 'rabbitmq'
 cookbook 'redisio'
 cookbook 'npm'
 cookbook 'nodejs'
-# cookbook 'nodejs', {:github => "git@github.com:mdxp/nodejs-cookbook.git"}
+# cookbook 'nodejs', {:github => "git@ github.com:mdxp/nodejs-cookbook.git"}
 cookbook 'varnish'
 cookbook 'gunicorn'
 cookbook 'supervisor', {:git => "git@github.com:poise/supervisor.git", :branch => 'master'}
