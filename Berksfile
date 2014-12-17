@@ -1,4 +1,5 @@
 source "https://supermarket.getchef.com"
+
 cookbook 'mongodb'
 cookbook 'rabbitmq'
 cookbook 'redisio'
@@ -11,8 +12,8 @@ cookbook 'build-essential'
 cookbook 'apt'
 cookbook 'yum'
 cookbook 'yum-epel'
-cookbook 'git'
-cookbook 'sqlite'
+# cookbook 'git'
+# cookbook 'sqlite'
 cookbook 'ulimit'
 # cookbook 'nfs'
 cookbook 'line'
