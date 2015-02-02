@@ -18,7 +18,7 @@ cookbook 'varnish'
 cookbook 'yum'
 cookbook 'yum-epel'
 cookbook 'windows', '~> 1.34.0'
-cookbook 'grunt_cookbook'
+# cookbook 'grunt_cookbook'
 
 
 # def opsworks_cookbook(name)
