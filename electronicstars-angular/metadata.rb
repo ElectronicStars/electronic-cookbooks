@@ -10,5 +10,5 @@ version '1.0.0'
 depends "deploy"
 depends 'nodejs'
 depends 'npm'
-depends 'grunt_cookbook'
+# depends 'grunt_cookbook'
 
