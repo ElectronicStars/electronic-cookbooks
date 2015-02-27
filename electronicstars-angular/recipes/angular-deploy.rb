@@ -19,11 +19,11 @@ node[:deploy].each do |application, deploy|
     group deploy[:group]
     environment ({'HOME' => '/home/deploy'})
   end
-  # execute 'grunt build' do
-  #   cwd ::File.join(deploy[:deploy_to], 'current')
-  #   user deploy[:user]
-  #   group deploy[:group]
-  #   environment ({'HOME' => '/home/deploy'})
-  # end
+  execute 'grunt build' do
+    cwd ::File.join(deploy[:deploy_to], 'current')
+    user deploy[:user]
+    group deploy[:group]
+    environment ({'HOME' => '/home/deploy'})
+  end
 
 end
