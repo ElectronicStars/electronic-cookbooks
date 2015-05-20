@@ -1,4 +1,5 @@
-application = node[:deploy][:application]
+application_name = 'core'
+application = node[:deploy][application_name]
 include_recipe 'nginx'
 
 if application[:ssl_support]
