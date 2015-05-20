@@ -1,10 +1,8 @@
-include_recipe 'nginx'
 application = node[:deploy][application_name]
+include_recipe 'nginx'
+
 if application[:ssl_support]
-
-
   # certificate
-
   directory "#{node[:nginx][:dir]}/ssl" do
     action :create
     owner "root"
