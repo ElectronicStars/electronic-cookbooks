@@ -50,6 +50,9 @@ template "#{node[:nginx][:dir]}/sites-available/core" do
   owner "root"
   group "root"
   mode 0644
+  variables(
+      :application => application
+  )
   notifies :restart, "service[nginx]", :delayed
 end
 
