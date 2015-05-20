@@ -37,20 +37,13 @@ node[:deploy].each do |application, deploy|
     run_action [] # Don't run actions here
   end
 
-  # cmd = deploy["django_collect_static"].is_a?(String) ? deploy["django_collect_static"] : "collectstatic --noinput"
-  # execute "#{::File.join(node[:deploy][application]["venv"], "bin", "python")} manage.py #{cmd}" do
-  #   cwd ::File.join(deploy[:deploy_to], 'current')
-  #   user deploy[:user]
-  #   group deploy[:group]
-  # end
-  # uwsgi --virtualenv /path/to/virtualenv --socket /path/to/django.socket --buffer-size=32768 --workers=5 --master --module wsgi_django
 
   command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'uwsgi')} --socket /tmp/core.socket --buffer-size=32768 --workers=5 --master --module core.wsgi"
   supervisor_service application do
     directory ::File.join(deploy[:deploy_to], "current")
     command command
     user deploy[:user]
-    group deploy[:group]
+
     autostart true
     autorestart true
     action :enable
@@ -58,14 +51,24 @@ node[:deploy].each do |application, deploy|
     stdout_logfile ::File.join(deploy[:deploy_to], "shared", "log", "current.log")
   end
   websocket = "ws-#{application}"
-  websocket_command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'uwsgi')} --socket /tmp/core.socket --buffer-size=32768 --workers=5 --master --module core.wsgi"
+  websocket_command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'uwsgi')} --http-socket /tmp/ws-core.socket --gevent 5000 --workers=2 --master --module core.wswsgi"
+  supervisor_service websocket do
+    directory ::File.join(deploy[:deploy_to], "current")
+    command websocket_command
+    user deploy[:user]
 
+    autostart true
+    autorestart true
+    action :enable
+    stderr_logfile ::File.join(deploy[:deploy_to], "shared", "log", "ws-error.log")
+    stdout_logfile ::File.join(deploy[:deploy_to], "shared", "log", "ws-current.log")
+  end
   celery = "celery-#{application}"
   celery_command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'celery')} worker --app=core.celery -B"
   supervisor_service celery do
     directory ::File.join(deploy[:deploy_to], "current")
     command celery_command
-    user 'root'
+    user deploy[:user]
     autostart true
     autorestart true
     action :enable
@@ -76,6 +79,9 @@ node[:deploy].each do |application, deploy|
     action :restart
   end
   supervisor_service application do
+    action :restart
+  end
+  supervisor_service websocket do
     action :restart
   end
 
