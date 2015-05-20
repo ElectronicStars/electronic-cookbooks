@@ -38,7 +38,7 @@ node[:deploy].each do |application, deploy|
   end
 
 
-  command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'uwsgi')} --socket /tmp/core.socket --buffer-size=32768 --workers=5 --master --module core.wsgi"
+  command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'uwsgi')} --socket /tmp/core.socket --chmod-socket=644 --buffer-size=32768 --workers=5 --master --module core.wsgi"
   supervisor_service application do
     directory ::File.join(deploy[:deploy_to], "current")
     command command
@@ -51,7 +51,7 @@ node[:deploy].each do |application, deploy|
     stdout_logfile ::File.join(deploy[:deploy_to], "shared", "log", "current.log")
   end
   websocket = "ws-#{application}"
-  websocket_command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'uwsgi')} --http-socket /tmp/ws-core.socket --gevent 5000 --workers=2 --master --module core.wswsgi"
+  websocket_command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'uwsgi')} --http-socket /tmp/ws-core.socket --chmod-socket=644 --gevent 5000 --workers=2 --master --module core.wswsgi"
   supervisor_service websocket do
     directory ::File.join(deploy[:deploy_to], "current")
     command websocket_command
