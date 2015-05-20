@@ -43,8 +43,9 @@ node[:deploy].each do |application, deploy|
   #   user deploy[:user]
   #   group deploy[:group]
   # end
+  # uwsgi --virtualenv /path/to/virtualenv --socket /path/to/django.socket --buffer-size=32768 --workers=5 --master --module wsgi_django
 
-  command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'uwsgi')} --http :80 --http-websockets  --gevent 5000 --module core.wswsgi --socket /tmp/mike.sock"
+  command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'uwsgi')} --socket /tmp/core.socket --buffer-size=32768 --workers=5 --master --module core.wsgi"
   supervisor_service application do
     directory ::File.join(deploy[:deploy_to], "current")
     command command

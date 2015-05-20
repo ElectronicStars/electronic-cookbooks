@@ -75,6 +75,10 @@ node[:deploy].each do |application, deploy|
     # stdout_logfile ::File.join(deploy[:deploy_to], "shared", "log", "current.log")
     action :enable
   end
+
+
+
+
   supervisor_service celery do
     action :restart
   end
