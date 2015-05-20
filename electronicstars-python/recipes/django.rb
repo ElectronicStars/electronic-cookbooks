@@ -49,13 +49,16 @@ node[:deploy].each do |application, deploy|
   supervisor_service application do
     directory ::File.join(deploy[:deploy_to], "current")
     command command
-    user 'root'
+    user deploy[:user]
+    group deploy[:group]
     autostart true
     autorestart true
     action :enable
     stderr_logfile ::File.join(deploy[:deploy_to], "shared", "log", "error.log")
     stdout_logfile ::File.join(deploy[:deploy_to], "shared", "log", "current.log")
   end
+  websocket = "ws-#{application}"
+  websocket_command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'uwsgi')} --socket /tmp/core.socket --buffer-size=32768 --workers=5 --master --module core.wsgi"
 
   celery = "celery-#{application}"
   celery_command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'celery')} worker --app=core.celery -B"
