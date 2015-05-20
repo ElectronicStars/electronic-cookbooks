@@ -31,7 +31,7 @@ proxy_pass http://unix:/tmp/ws-core.socket;
         uwsgi_pass unix:/tmp/core.socket;
 
     }
-    location / {
+    location /ws/ {
     # switch off logging
     access_log off;
 
