@@ -42,7 +42,7 @@ node[:deploy].each do |application, deploy|
   supervisor_service application do
     directory ::File.join(deploy[:deploy_to], "current")
     command command
-    user deploy[:user]
+    user 'root'
 
     autostart true
     autorestart true
@@ -55,7 +55,7 @@ node[:deploy].each do |application, deploy|
   supervisor_service websocket do
     directory ::File.join(deploy[:deploy_to], "current")
     command websocket_command
-    user deploy[:user]
+    user 'root'
 
     autostart true
     autorestart true
@@ -68,7 +68,7 @@ node[:deploy].each do |application, deploy|
   supervisor_service celery do
     directory ::File.join(deploy[:deploy_to], "current")
     command celery_command
-    user deploy[:user]
+    user 'root'
     autostart true
     autorestart true
     action :enable
