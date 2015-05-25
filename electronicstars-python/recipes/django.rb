@@ -38,7 +38,7 @@ node[:deploy].each do |application, deploy|
   end
 
 
-  command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'uwsgi')} --socket /tmp/core.socket --chmod-socket=777 --buffer-size=32768 --workers=5 --master --module core.wsgi"
+  command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'uwsgi')} --socket /tmp/core.socket --chmod-socket=777 --buffer-size=32768 --workers=2 --master --module core.wsgi"
   supervisor_service application do
     directory ::File.join(deploy[:deploy_to], "current")
     command command
