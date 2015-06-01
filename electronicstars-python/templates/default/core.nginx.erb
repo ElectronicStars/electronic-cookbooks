@@ -4,7 +4,7 @@ location /
 include uwsgi_params;
 uwsgi_pass unix:/tmp/core.socket;
 if ($request_method = 'OPTIONS') {
-add_header Access-Control-Allow-Origin *;
+add_header 'Access-Control-Allow-Origin' '$http_origin';
 
 #
 # Om nom nom cookies
@@ -50,7 +50,7 @@ proxy_pass http://unix:/tmp/ws-core.socket;
     include uwsgi_params;
     uwsgi_pass unix:/tmp/core.socket;
     if ($request_method = 'OPTIONS') {
-    add_header Access-Control-Allow-Origin *;
+    add_header 'Access-Control-Allow-Origin' '$http_origin';
 
     #
     # Om nom nom cookies
