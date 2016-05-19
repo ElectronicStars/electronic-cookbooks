@@ -1,8 +1,7 @@
 source "https://supermarket.getchef.com"
 
 cookbook 'apt'
-cookbook 'build-essential'
-
+cookbook 'build-essential' , '= 3.2.0'
 cookbook 'line'
 cookbook 'mongodb'
 cookbook 'npm'
