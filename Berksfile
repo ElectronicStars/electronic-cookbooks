@@ -1,7 +1,7 @@
 source "https://supermarket.getchef.com"
 
-cookbook 'apt', '= 3.0.0'
-cookbook 'build-essential' , '= 3.2.0'
+cookbook 'apt', '~> 3.0.0'
+cookbook 'build-essential' , '~>  3.2.0'
 cookbook 'line'
 cookbook 'mongodb'
 cookbook 'npm'
@@ -16,7 +16,7 @@ cookbook 'uwsgi', {:gitbub => "git@github.com:50onRed/uwsgi.git"}
 cookbook 'varnish'
 cookbook 'yum'
 cookbook 'yum-epel'
-# cookbook 'grunt_cookbook'
+
 
 
 # def opsworks_cookbook(name)
