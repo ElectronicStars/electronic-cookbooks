@@ -18,11 +18,10 @@ cookbook 'yum'
 cookbook 'yum-epel'
 
 
+def opsworks_cookbook(name)
+    cookbook name, {:github => "aws/opsworks-cookbooks", :rel => name, :tag => 'release-chef-11.10'}
+end
 
-# def opsworks_cookbook(name)
-#   cookbook name, {:github => "aws/opsworks-cookbooks", :rel => name, :tag => 'release-chef-11.10'}
-# end
-# #
 # opsworks_cookbook 'deploy'
 # opsworks_cookbook 'dependencies'
 # opsworks_cookbook 'gem_support'
