@@ -7,14 +7,14 @@ node[:deploy].each do |application, deploy|
     user 'root'
     group 'root'
   end
-  execute 'bower install -F' do
+  execute 'bower install -F --allow-root' do
     cwd ::File.join(deploy[:deploy_to], 'current')
     user deploy[:user]
     group deploy[:group]
     environment ({'HOME' => '/home/deploy'})
   end
 
-  execute 'grunt build' do
+  execute 'gulp build' do
     cwd ::File.join(deploy[:deploy_to], 'current')
     user deploy[:user]
     group deploy[:group]
