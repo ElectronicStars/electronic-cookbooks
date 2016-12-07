@@ -16,6 +16,7 @@ cookbook 'uwsgi', {:gitbub => "git@github.com:50onRed/uwsgi.git"}
 cookbook 'varnish'
 cookbook 'yum'
 cookbook 'yum-epel','0.7.1'
+cookbook 'ohai', '= 3.0.1'
 
 
 def opsworks_cookbook(name)
