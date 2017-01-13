@@ -18,6 +18,7 @@ cookbook 'yum'
 cookbook 'yum-epel','0.7.1'
 cookbook 'ohai', '= 3.0.1'
 cookbook 'homebrew', '= 2.1.2'
+cookbook 'git', '= 4.6.0'
 
 
 
