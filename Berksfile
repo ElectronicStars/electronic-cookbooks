@@ -1,7 +1,7 @@
 source "https://supermarket.getchef.com"
 
-cookbook 'apt'
-cookbook 'build-essential' , '= 3.2.0'
+cookbook 'apt', '3.0.0'
+cookbook 'build-essential' , '3.2.0'
 cookbook 'line'
 cookbook 'mongodb'
 cookbook 'npm'
@@ -15,15 +15,17 @@ cookbook 'ulimit'
 cookbook 'uwsgi', {:gitbub => "git@github.com:50onRed/uwsgi.git"}
 cookbook 'varnish'
 cookbook 'yum'
-cookbook 'yum-epel'
-cookbook 'windows', '~> 1.34.0'
-# cookbook 'grunt_cookbook'
+cookbook 'yum-epel','0.7.1'
+cookbook 'ohai', '= 3.0.1'
+cookbook 'homebrew', '= 2.1.2'
+cookbook 'git', '= 4.6.0'
 
 
-# def opsworks_cookbook(name)
-#   cookbook name, {:github => "aws/opsworks-cookbooks", :rel => name, :tag => 'release-chef-11.10'}
-# end
-# #
+
+def opsworks_cookbook(name)
+    cookbook name, {:github => "aws/opsworks-cookbooks", :rel => name, :tag => 'release-chef-11.10'}
+end
+
 # opsworks_cookbook 'deploy'
 # opsworks_cookbook 'dependencies'
 # opsworks_cookbook 'gem_support'
