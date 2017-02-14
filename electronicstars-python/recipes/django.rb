@@ -38,12 +38,24 @@ node[:deploy].each do |application, deploy|
   end
 
 
-  command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'uwsgi')} --socket /tmp/core.socket --chmod-socket=777 --buffer-size=32768 --workers=2 --master --module core.wsgi"
+  command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'uwsgi')} \
+          --socket=/tmp/core.socket \
+          --chmod-socket=777 \
+          --uid=deploy --gid=www-data \
+          --harakiri=80 \
+          --max-requests=5000 \
+          --vacuum \
+          --enable-threads \
+          --gevent=100 \
+          --processes=2 \
+          --buffer-size=32768 \
+          --master \
+          --module core.wsgi"
+
   supervisor_service application do
     directory ::File.join(deploy[:deploy_to], "current")
     command command
     user 'root'
-
     autostart true
     autorestart true
     action :enable
@@ -51,7 +63,16 @@ node[:deploy].each do |application, deploy|
     stdout_logfile ::File.join(deploy[:deploy_to], "shared", "log", "current.log")
   end
   websocket = "ws-#{application}"
-  websocket_command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'uwsgi')} --http-socket /tmp/ws-core.socket --chmod-socket=777 --gevent 5000 --workers=2 --master --module core.wswsgi"
+  websocket_command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'uwsgi')} \
+                    --http-socket=/tmp/ws-core.socket \
+                    --chmod-socket=777 \
+                    --gevent=5000 \
+                    --uid=deploy --gid=www-data \
+                    --vacuum \
+                    --enable-threads \
+                    --processes=2 \
+                    --master \
+                    --module core.wswsgi"
   supervisor_service websocket do
     directory ::File.join(deploy[:deploy_to], "current")
     command websocket_command
@@ -64,10 +85,14 @@ node[:deploy].each do |application, deploy|
     stdout_logfile ::File.join(deploy[:deploy_to], "shared", "log", "ws-current.log")
   end
   celery = "celery-#{application}"
-  celery_command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'celery')} worker --app=core.celery -B"
+  celery_new_relic = ::File.join(deploy[:deploy_to], "current", "newrelic.ini")
+  celery_command = "newrelic-admin run-program \
+  #{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'celery')} \
+                  worker --app=core.celery -B"
   supervisor_service celery do
     directory ::File.join(deploy[:deploy_to], "current")
     command celery_command
+    environment Hash["NEW_RELIC_CONFIG_FILE" => celery_new_relic]
     user 'root'
     autostart true
     autorestart true
