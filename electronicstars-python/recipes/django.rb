@@ -47,7 +47,7 @@ node[:deploy].each do |application, deploy|
           --vacuum \
           --enable-threads \
           --gevent=100 \
-          --processes=2 \
+          --processes=10 \
           --buffer-size=32768 \
           --master \
           --module core.wsgi"
