@@ -15,7 +15,7 @@ cookbook 'python'
 cookbook 'ulimit'
 cookbook 'uwsgi', {:gitbub => "git@github.com:50onRed/uwsgi.git"}
 cookbook 'varnish'
-cookbook 'yum'
+cookbook 'yum', '= 3.13.0'
 cookbook 'yum-epel','0.7.1'
 cookbook 'ohai', '= 3.0.1'
 cookbook 'homebrew', '= 2.1.2'
