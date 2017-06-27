@@ -1,7 +1,7 @@
 source "https://supermarket.getchef.com"
 
-cookbook 'ark', '= 1.2.0' ,git: 'git://github.com/opscode-cookbooks/ark.git'
-cookbook 'apt', '3.0.0'
+#cookbook 'ark', '= 1.2.0' 
+cookbook 'apt', '= 3.0.0'
 cookbook 'build-essential' , '3.2.0'
 cookbook 'line'
 cookbook 'mongodb'
@@ -26,7 +26,7 @@ cookbook 'git', '= 4.6.0'
 def opsworks_cookbook(name)
     cookbook name, {:github => "aws/opsworks-cookbooks", :rel => name, :tag => 'release-chef-11.10'}
 end
-opsworks_cookbook 'ark'
+
 # opsworks_cookbook 'deploy'
 # opsworks_cookbook 'dependencies'
 # opsworks_cookbook 'gem_support'
