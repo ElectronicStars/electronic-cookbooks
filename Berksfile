@@ -1,7 +1,6 @@
 source "https://supermarket.getchef.com"
 
-cookbook 'ark', {:git => "github.com/opscode-cookbooks/ark.git", :tag => 'v1.2.0'}
-
+cookbook 'ark', '= 1.2.0' 
 cookbook 'apt', '= 3.0.0'
 cookbook 'build-essential' , '3.2.0'
 cookbook 'line'
