@@ -5,8 +5,8 @@ node[:deploy].each do |application, deploy|
 
   execute 'npm install ' do
     cwd ::File.join(deploy[:deploy_to], 'current')
-    user deploy[:user]
-    group deploy[:group]
+    user "root"
+    group "root"
   end
 
   execute 'bower install ' do
