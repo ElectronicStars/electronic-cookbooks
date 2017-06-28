@@ -2,12 +2,14 @@ node[:deploy].each do |application, deploy|
   deploy = node[:deploy][application]
 
   include_recipe "nodejs::npm"
+
   execute 'npm install ' do
     cwd ::File.join(deploy[:deploy_to], 'current')
     user deploy[:user]
     group deploy[:group]
   end
-  execute 'bower install -F ' do
+
+  execute 'bower install ' do
     cwd ::File.join(deploy[:deploy_to], 'current')
     user deploy[:user]
     group deploy[:group]
