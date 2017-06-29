@@ -36,27 +36,16 @@ node[:deploy].each do |application, deploy|
     app_name application
     run_action [] # Don't run actions here
   end
-  commandCelery = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'celery')}  -A backend worker -l inf"
- #   supervisor_service "celery-#{application}" do
-  #    directory ::File.join(deploy[:deploy_to], "current")
-   #   command command
-    #  user deploy[:user]
-    #  autostart true
-    #  autorestart true
-    #  action :enable
 
-    #end
-  command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'python')} backend.py -p csslisten -n dev_server1"
+  command = "#{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'celery')}  worker --app=backend.celery --loglevel INFO"
   supervisor_service application do
     directory ::File.join(deploy[:deploy_to], "current")
     command command
-    user "root"
+    user deploy[:user]
+    group deploy[:group]
     autostart true
     autorestart true
     action :enable
-
   end
-
-
 
 end
