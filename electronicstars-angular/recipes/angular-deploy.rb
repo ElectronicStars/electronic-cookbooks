@@ -9,7 +9,7 @@ node[:deploy].each do |application, deploy|
     group "root"
   end
 
-  execute 'bower install ' do
+  execute 'bower install -F' do
     cwd ::File.join(deploy[:deploy_to], 'current')
     user deploy[:user]
     group deploy[:group]
