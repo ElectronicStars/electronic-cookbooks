@@ -42,7 +42,6 @@ node[:deploy].each do |application, deploy|
     directory ::File.join(deploy[:deploy_to], "current")
     command commandCelery
     user deploy[:user]
-    group deploy[:group]
     autostart true
     autorestart true
     action :enable
