@@ -84,11 +84,11 @@ node[:deploy].each do |application, deploy|
     stderr_logfile ::File.join(deploy[:deploy_to], "shared", "log", "ws-error.log")
     stdout_logfile ::File.join(deploy[:deploy_to], "shared", "log", "ws-current.log")
   end
+
   celery = "celery-#{application}"
   celery_new_relic = ::File.join(deploy[:deploy_to], "current", "newrelic.ini")
   celery_command = "newrelic-admin run-program \
-  #{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'celery')} \
-                  worker --app=core.celery -B"
+  #{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'celery')} worker --app=core.celery -B -Q core"
   supervisor_service celery do
     directory ::File.join(deploy[:deploy_to], "current")
     command celery_command
@@ -100,7 +100,27 @@ node[:deploy].each do |application, deploy|
     stderr_logfile ::File.join(deploy[:deploy_to], "shared", "log", "error_celery.log")
     stdout_logfile ::File.join(deploy[:deploy_to], "shared", "log", "current_celery.log")
   end
+
+  celery_match = "celery-match-#{application}"
+  celery_match_new_relic = ::File.join(deploy[:deploy_to], "current", "newrelic.ini")
+  celery_match_command = "newrelic-admin run-program \
+  #{::File.join(deploy[:deploy_to], 'shared', 'env', 'bin', 'celery')} worker --app=core.celery  -Q match -c 1"
+  supervisor_service celery_match do
+    directory ::File.join(deploy[:deploy_to], "current")
+    command celery_match_command
+    environment Hash["NEW_RELIC_CONFIG_FILE" => celery_match_new_relic]
+    user 'root'
+    autostart true
+    autorestart true
+    action :enable
+    stderr_logfile ::File.join(deploy[:deploy_to], "shared", "log", "error_celery_match.log")
+    stdout_logfile ::File.join(deploy[:deploy_to], "shared", "log", "current_celery_match.log")
+  end
+
   supervisor_service celery do
+    action :restart
+  end
+  supervisor_service celery_match do
     action :restart
   end
   supervisor_service application do
@@ -109,6 +129,9 @@ node[:deploy].each do |application, deploy|
   supervisor_service websocket do
     action :restart
   end
+
+  
+  
 
 
 end
