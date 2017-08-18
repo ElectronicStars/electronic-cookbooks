@@ -10,7 +10,7 @@ cookbook 'nodejs'
 cookbook 'rabbitmq'
 cookbook 'redisio'
 cookbook 'runit'
-cookbook 'supervisor', {:git => "git@github.com:poise/supervisor.git", :branch => 'master'}
+cookbook 'supervisor', {:gitbub => "git@github.com:poise/supervisor.git"}
 cookbook 'python'
 cookbook 'ulimit'
 cookbook 'uwsgi', {:gitbub => "git@github.com:50onRed/uwsgi.git"}
