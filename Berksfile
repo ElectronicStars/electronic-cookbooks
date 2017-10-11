@@ -5,7 +5,6 @@ cookbook 'apt', '= 3.0.0'
 cookbook 'build-essential' , '3.2.0'
 cookbook 'line'
 cookbook 'logrotate', '= 1.9.2'
-
 cookbook 'selinux_policy', '= 1.1.1'
 cookbook 'mongodb'
 cookbook 'npm'
@@ -27,9 +26,9 @@ cookbook 'dmg', '= 2.4.0'
 
 
 
-def opsworks_cookbook(name)
-    cookbook name, {:github => "aws/opsworks-cookbooks", :rel => name, :tag => 'release-chef-11.10'}
-end
+#def opsworks_cookbook(name)
+#    cookbook name, {:github => "aws/opsworks-cookbooks", :rel => name, :tag => 'release-chef-11.10'}
+#end
 
 # opsworks_cookbook 'deploy'
 # opsworks_cookbook 'dependencies'
