@@ -5,7 +5,7 @@ cookbook 'apt', '= 3.0.0'
 cookbook 'build-essential' , '3.2.0'
 cookbook 'line'
 cookbook 'logrotate', '= 1.9.2'
-cookbook 'yum', '= 3.13.0'
+
 cookbook 'selinux_policy', '= 1.1.1'
 cookbook 'mongodb'
 cookbook 'npm'
