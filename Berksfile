@@ -12,7 +12,7 @@ cookbook 'redisio'
 cookbook 'runit'
 cookbook 'supervisor', {:gitbub => "git@github.com:poise/supervisor.git"}
 cookbook 'python'
-cookbook 'ulimit'
+cookbook 'ulimit','= 0.3.3'
 cookbook 'uwsgi', {:gitbub => "git@github.com:50onRed/uwsgi.git"}
 cookbook 'varnish'
 cookbook 'yum', '= 3.13.0'
